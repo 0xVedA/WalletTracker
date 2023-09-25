@@ -14,6 +14,7 @@ polygonscan_base_url = "https://api.polygonscan.com/api"
 # Store the last known transaction hash
 last_transaction_hash = ""
 
+
 def get_wallet_transactions(address, network):
     if network == "ethereum":
         api_key = etherscan_api_key
@@ -35,8 +36,12 @@ def get_wallet_transactions(address, network):
     if response.status_code == 200:
         data = response.json()
         transactions = data.get("result", [])
+
+        # Include the timeStamp field in each transaction
         for tx in transactions:
             tx['network'] = network
+            tx['timeStamp'] = int(tx['timeStamp'])
+
         return transactions
     else:
         return []

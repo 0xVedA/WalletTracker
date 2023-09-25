@@ -1,3 +1,5 @@
+<div id="alerts"></div>
+
 {% for tx in transactions %}
 <div class="transaction">
     <p>Tx Hash: {{ tx['hash'] }}</p>
@@ -6,5 +8,6 @@
     <p>To: {{ tx['to'] }}</p>
     <p>Value (wei): {{ tx['value'] }}</p>
     <p>Network: {{ tx['network'] }}</p>
+    <p>Time: <span class="transaction-time" data-timestamp="{{ tx['timeStamp'] }}"></span></p>
 </div>
 {% endfor %}

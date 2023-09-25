@@ -18,23 +18,26 @@ $(document).ready(function() {
                     // New transactions detected, show an alert
                     showAlert("New transactions detected!");
                 }
+
+                // Update transaction times
+                updateTransactionTimes();
             }
         });
     }
 
     function showAlert(message) {
-        // Create an alert element
-        const alertElement = $('<div class="alert alert-success" role="alert"></div>');
-        alertElement.text(message);
-
-        // Append the alert to the page and automatically dismiss it after a few seconds
-        $("#alerts").append(alertElement);
-        setTimeout(function() {
-            alertElement.fadeOut("slow", function() {
-                $(this).remove();
-            });
-        }, 5000);
+        // ... (previous code for showing alerts)
     }
+
+    function updateTransactionTimes() {
+    // Format and display transaction times
+    $(".transaction").each(function() {
+        const timestamp = parseInt($(this).find(".transaction-time").data("timestamp"));
+        const formattedTime = new Date(timestamp * 1000).toLocaleString();
+        $(this).find(".transaction-time").text(formattedTime);
+    });
+}
+
 
     $("#walletForm").on("submit", function(e) {
         e.preventDefault();
@@ -43,4 +46,7 @@ $(document).ready(function() {
         fetchTransactions(walletAddress, network);
         setInterval(() => fetchTransactions(walletAddress, network), 10000);
     });
+
+    // Initial call to update transaction times on page load
+    updateTransactionTimes();
 });
