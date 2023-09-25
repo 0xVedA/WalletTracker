@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockchain Wallet Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Blockchain Wallet Tracker</h1>
+        <form id="walletForm">
+            <label for="walletAddress">Enter Wallet Address:</label>
+            <input type="text" id="walletAddress" required>
+            <button type="submit">Track</button>
+        </form>
+        <div id="transactionList">
+            <!-- Transactions will be displayed here -->
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
