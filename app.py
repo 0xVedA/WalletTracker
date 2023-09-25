@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 # Replace with your own API keys
 etherscan_api_key = "FD9EINWQSNZJ6MT59SKZ6U3BHJNXD2TR48"
-polygonscan_api_key = "YOUR_POLYGONSCAN_API_KEY"
+polygonscan_api_key = "SS6EQC3YBPDQHE2443B63BHXJJ1HY2AQGY"
 
 # Etherscan and PolygonScan API endpoints
 etherscan_base_url = "https://api.etherscan.io/api"
