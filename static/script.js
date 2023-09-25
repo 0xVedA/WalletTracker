@@ -7,9 +7,33 @@ $(document).ready(function() {
             type: "POST",
             data: { walletAddress: walletAddress },
             success: function(data) {
-                $("#transactionList").html(data);
+                const transactionList = $("#transactionList");
+                const currentTransactions = transactionList.html();
+
+                // Update the transaction list
+                transactionList.html(data);
+
+                // Check for new transactions
+                if (data !== currentTransactions) {
+                    // New transactions detected, show an alert
+                    showAlert("New transactions detected!");
+                }
             }
         });
+    }
+
+    function showAlert(message) {
+        // Create an alert element
+        const alertElement = $('<div class="alert alert-success" role="alert"></div>');
+        alertElement.text(message);
+
+        // Append the alert to the page and automatically dismiss it after a few seconds
+        $("#alerts").append(alertElement);
+        setTimeout(function() {
+            alertElement.fadeOut("slow", function() {
+                $(this).remove();
+            });
+        }, 5000);
     }
 
     $("#walletForm").on("submit", function(e) {

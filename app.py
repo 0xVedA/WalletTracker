@@ -51,5 +51,21 @@ def index():
 
     return render_template("index.html", transactions=None)
 
+# Route for Ethereum transactions
+@app.route("/get_ethereum_transactions", methods=["POST"])
+def get_ethereum_transactions():
+    wallet_address = request.form.get("walletAddress")
+    network = "ethereum"  # Explicitly set the network to Ethereum
+    transactions = get_wallet_transactions(wallet_address, network)
+    return render_template("transactions.html", transactions=transactions)
+
+# Route for Polygon transactions
+@app.route("/get_polygon_transactions", methods=["POST"])
+def get_polygon_transactions():
+    wallet_address = request.form.get("walletAddress")
+    network = "polygon"  # Explicitly set the network to Polygon
+    transactions = get_wallet_transactions(wallet_address, network)
+    return render_template("transactions.html", transactions=transactions)
+
 if __name__ == "__main__":
     app.run(debug=True)
