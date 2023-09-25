@@ -12,18 +12,24 @@ $(document).ready(function() {
             success: function(data) {
                 const transactionList = $("#transactionList");
 
-                // Check for new transactions
-                const latestTransaction = transactionList.find(".transaction").first();
-                const newTransactionHash = latestTransaction.find(".transaction-hash").text();
+                // Extract the transaction hashes from the new data
+                const newTransactionHashes = $(data).find(".transaction-hash").map(function() {
+                    return $(this).text();
+                }).get();
 
-                if (newTransactionHash !== lastTransactionHash) {
-                    // New transaction detected, show an alert
-                    const senderAddress = latestTransaction.find(".sender-address").text();
-                    const receiverAddress = latestTransaction.find(".receiver-address").text();
-                    showAlert("New transaction detected!", senderAddress, receiverAddress);
+                if (newTransactionHashes.length > 0) {
+                    // Get the latest transaction hash
+                    const newTransactionHash = newTransactionHashes[0];
 
-                    // Update the last known transaction hash
-                    lastTransactionHash = newTransactionHash;
+                    if (newTransactionHash !== lastTransactionHash) {
+                        // New transaction detected, show an alert
+                        const senderAddress = $(data).find(".sender-address").first().text();
+                        const receiverAddress = $(data).find(".receiver-address").first().text();
+                        showAlert("New transaction detected!", senderAddress, receiverAddress);
+
+                        // Update the last known transaction hash
+                        lastTransactionHash = newTransactionHash;
+                    }
                 }
 
                 // Update the transaction list
