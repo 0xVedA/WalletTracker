@@ -1,4 +1,7 @@
 $(document).ready(function() {
+    // Keep track of the last known transaction hash
+    let lastTransactionHash = "";
+
     function fetchTransactions(walletAddress, network) {
         const apiEndpoint = network === "ethereum" ? "/get_ethereum_transactions" : "/get_polygon_transactions";
 
@@ -8,21 +11,23 @@ $(document).ready(function() {
             data: { walletAddress: walletAddress },
             success: function(data) {
                 const transactionList = $("#transactionList");
-                const currentTransactions = transactionList.html();
+
+                // Check for new transactions
+                const latestTransaction = transactionList.find(".transaction").first();
+                const newTransactionHash = latestTransaction.find(".transaction-hash").text();
+
+                if (newTransactionHash !== lastTransactionHash) {
+                    // New transaction detected, show an alert
+                    const senderAddress = latestTransaction.find(".sender-address").text();
+                    const receiverAddress = latestTransaction.find(".receiver-address").text();
+                    showAlert("New transaction detected!", senderAddress, receiverAddress);
+
+                    // Update the last known transaction hash
+                    lastTransactionHash = newTransactionHash;
+                }
 
                 // Update the transaction list
                 transactionList.html(data);
-
-                // Check for new transactions
-                if (data !== currentTransactions) {
-                    // Get the sender and receiver addresses from the latest transaction
-                    const latestTransaction = $(data).find(".transaction").first();
-                    const senderAddress = latestTransaction.find(".sender-address").text();
-                    const receiverAddress = latestTransaction.find(".receiver-address").text();
-
-                    // New transactions detected, show an alert with sender and receiver addresses
-                    showAlert("New transaction detected!", senderAddress, receiverAddress);
-                }
 
                 // Reverse the order of transactions and update transaction times
                 const reversedTransactions = transactionList.children().get().reverse();
