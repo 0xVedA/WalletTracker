@@ -15,29 +15,39 @@ $(document).ready(function() {
 
                 // Check for new transactions
                 if (data !== currentTransactions) {
-                    // New transactions detected, show an alert
-                    showAlert("New transactions detected!");
+                    // Get the sender and receiver addresses from the latest transaction
+                    const latestTransaction = $(data).find(".transaction").first();
+                    const senderAddress = latestTransaction.find(".sender-address").text();
+                    const receiverAddress = latestTransaction.find(".receiver-address").text();
+
+                    // New transactions detected, show an alert with sender and receiver addresses
+                    showAlert("New transaction detected!", senderAddress, receiverAddress);
                 }
 
-                // Update transaction times
+                // Reverse the order of transactions and update transaction times
+                const reversedTransactions = transactionList.children().get().reverse();
+                transactionList.empty().append(reversedTransactions);
                 updateTransactionTimes();
             }
         });
     }
 
-    function showAlert(message) {
-        // ... (previous code for showing alerts)
+    function showAlert(message, sender, receiver) {
+        // Create an alert message that includes sender and receiver addresses
+        const alertMessage = `New transaction detected!\nSender: ${sender}\nReceiver: ${receiver}`;
+
+        // Display a simple alert popup with the message
+        alert(alertMessage);
     }
 
     function updateTransactionTimes() {
-    // Format and display transaction times
-    $(".transaction").each(function() {
-        const timestamp = parseInt($(this).find(".transaction-time").data("timestamp"));
-        const formattedTime = new Date(timestamp * 1000).toLocaleString();
-        $(this).find(".transaction-time").text(formattedTime);
-    });
-}
-
+        // Format and display transaction times
+        $(".transaction").each(function() {
+            const timestamp = parseInt($(this).find(".transaction-time").data("timestamp"));
+            const formattedTime = new Date(timestamp * 1000).toLocaleString();
+            $(this).find(".transaction-time").text(formattedTime);
+        });
+    }
 
     $("#walletForm").on("submit", function(e) {
         e.preventDefault();

@@ -4,8 +4,8 @@
 <div class="transaction">
     <p>Tx Hash: {{ tx['hash'] }}</p>
     <p>Block Number: {{ tx['blockNumber'] }}</p>
-    <p>From: {{ tx['from'] }}</p>
-    <p>To: {{ tx['to'] }}</p>
+    <p class="sender-address">Sender: {{ tx['from'] }}</p>
+    <p class="receiver-address">Receiver: {{ tx['to'] }}</p>
     <p>Value (wei): {{ tx['value'] }}</p>
     <p>Network: {{ tx['network'] }}</p>
     <p>Time: <span class="transaction-time" data-timestamp="{{ tx['timeStamp'] }}"></span></p>
