@@ -1,21 +1,55 @@
-# This is a sample Python script.
+from flask import Flask, render_template, request
+import requests
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+app = Flask(__name__)
 
+# Replace with your own API keys
+etherscan_api_key = "FD9EINWQSNZJ6MT59SKZ6U3BHJNXD2TR48"
+polygonscan_api_key = "YOUR_POLYGONSCAN_API_KEY"
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+# Etherscan and PolygonScan API endpoints
+etherscan_base_url = "https://api.etherscan.io/api"
+polygonscan_base_url = "https://api.polygonscan.com/api"
 
+# Store the last known transaction hash
+last_transaction_hash = ""
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+def get_wallet_transactions(address, network):
+    if network == "ethereum":
+        api_key = etherscan_api_key
+        api_endpoint = etherscan_base_url
+    elif network == "polygon":
+        api_key = polygonscan_api_key
+        api_endpoint = polygonscan_base_url
+    else:
+        return []
 
+    params = {
+        "module": "account",
+        "action": "txlist",
+        "address": address,
+        "apikey": api_key,
+    }
 
+    response = requests.get(api_endpoint, params=params)
+    if response.status_code == 200:
+        data = response.json()
+        transactions = data.get("result", [])
+        for tx in transactions:
+            tx['network'] = network
+        return transactions
+    else:
+        return []
 
+@app.route("/", methods=["GET", "POST"])
+def index():
+    if request.method == "POST":
+        wallet_address = request.form.get("walletAddress")
+        network = request.form.get("network")
+        transactions = get_wallet_transactions(wallet_address, network)
+        return render_template("transactions.html", transactions=transactions)
 
+    return render_template("index.html", transactions=None)
 
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+if __name__ == "__main__":
+    app.run(debug=True)

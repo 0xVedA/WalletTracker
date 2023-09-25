@@ -1,0 +1,10 @@
+{% for tx in transactions %}
+<div class="transaction">
+    <p>Tx Hash: {{ tx['hash'] }}</p>
+    <p>Block Number: {{ tx['blockNumber'] }}</p>
+    <p>From: {{ tx['from'] }}</p>
+    <p>To: {{ tx['to'] }}</p>
+    <p>Value (wei): {{ tx['value'] }}</p>
+    <p>Network: {{ tx['network'] }}</p>
+</div>
+{% endfor %}
