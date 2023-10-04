@@ -32,19 +32,30 @@ def get_wallet_transactions(address, network):
         "apikey": api_key,
     }
 
+    # For Polygon, update the module and action
+    if network == "polygon":
+        params["module"] = "account"
+        params["action"] = "tokentx"
+
     response = requests.get(api_endpoint, params=params)
     if response.status_code == 200:
         data = response.json()
-        transactions = data.get("result", [])
 
-        # Include the timeStamp field in each transaction
+        # Extract transactions based on the network (Ethereum or Polygon)
+        if network == "ethereum":
+            transactions = data.get("result", [])
+        elif network == "polygon":
+            transactions = data.get("result", [])
+
         for tx in transactions:
+            # Include the network information
             tx['network'] = network
-            tx['timeStamp'] = int(tx['timeStamp'])
-
+            # If you are using the "tokentx" action for Polygon, adapt the field names accordingly
+            # For example, use tx['value'] for the token amount in Polygon transactions
         return transactions
     else:
         return []
+
 
 @app.route("/", methods=["GET", "POST"])
 def index():
